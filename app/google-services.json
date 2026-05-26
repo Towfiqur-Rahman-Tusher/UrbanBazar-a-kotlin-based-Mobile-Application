@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "882180401375",
+    "project_id": "urban-bazaar-c0a79",
+    "storage_bucket": "urban-bazaar-c0a79.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882180401375:android:eef8ebe4cbc5a5ad46a16a",
+        "android_client_info": {
+          "package_name": "com.example.urbanbazar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAn5xB_AZaw3BHRtzV52OQee4xFJKfTdrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
