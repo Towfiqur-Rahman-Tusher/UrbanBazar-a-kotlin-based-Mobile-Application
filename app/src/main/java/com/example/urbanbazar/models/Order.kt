@@ -9,6 +9,7 @@ data class Order(
 )
 
 data class CartItem(
+    val cartItemId: String = "",
     val productId: String = "",
     val productName: String = "",
     val price: Double = 0.0,

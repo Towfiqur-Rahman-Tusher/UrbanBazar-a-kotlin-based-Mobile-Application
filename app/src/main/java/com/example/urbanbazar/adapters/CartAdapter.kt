@@ -35,7 +35,7 @@ class CartAdapter(
 
         fun bind(item: CartItem, position: Int, onRemove: (Int) -> Unit) {
             tvName.text = item.productName
-            tvPrice.text = "₹${item.price} x ${item.quantity}"
+            tvPrice.text = "৳${item.price} x ${item.quantity}"
             btnRemove.setOnClickListener { onRemove(position) }
         }
     }

@@ -12,7 +12,6 @@ import com.example.urbanbazar.R
 import com.example.urbanbazar.adapters.ProductAdapter
 import com.example.urbanbazar.databinding.ActivityHomeBinding
 import com.example.urbanbazar.models.Product
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -393,21 +392,42 @@ class HomeActivity : AppCompatActivity() {
             return
         }
 
-        val cartItem = hashMapOf(
-            "userId" to userId,
-            "productId" to product.id,
-            "productName" to product.name,
-            "price" to product.price,
-            "quantity" to 1,
-            "timestamp" to System.currentTimeMillis()
-        )
+        db.collection("carts")
+            .whereEqualTo("userId", userId)
+            .whereEqualTo("productId", product.id)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val doc = documents.documents[0]
+                    val currentQty = (doc.getLong("quantity") ?: 1L).toInt()
+                    doc.reference.update("quantity", currentQty + 1)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "✓ ${product.name} quantity updated in cart!", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Failed to update cart: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    val cartItem = hashMapOf(
+                        "userId" to userId,
+                        "productId" to product.id,
+                        "productName" to product.name,
+                        "price" to product.price,
+                        "quantity" to 1,
+                        "timestamp" to System.currentTimeMillis()
+                    )
 
-        db.collection("carts").add(cartItem)
-            .addOnSuccessListener {
-                Toast.makeText(this, "✓ ${product.name} added to cart!", Toast.LENGTH_SHORT).show()
+                    db.collection("carts").add(cartItem)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "✓ ${product.name} added to cart!", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Failed to add to cart: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Added to cart: ${product.name}", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error adding to cart: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
